@@ -11,6 +11,6 @@ namespace GA_BO.input
         public IGenerator generator;
         public int numberOfIslands;
         public List<int>[] connections;
-        public List<IslandConfiguration> configurations; 
+        public List<IslandConfiguration> configurations;
     }
 }

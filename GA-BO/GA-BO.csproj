@@ -57,8 +57,14 @@
     <Compile Include="input\IslandConfiguration.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="qap\QAPGenerator.cs" />
+    <Compile Include="qap\QAPIndividual.cs" />
+    <Compile Include="qap\QAPProblem.cs" />
+    <Compile Include="qap\QAPTester.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="qap\problems\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
