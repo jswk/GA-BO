@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GA_BO.input;
+using GA_BO.algorithm.interfaces;
 
 namespace GA_BO.algorithm
 {
