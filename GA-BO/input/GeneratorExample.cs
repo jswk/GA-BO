@@ -6,7 +6,7 @@ using GA_BO.algorithm.interfaces;
 
 namespace GA_BO.input
 {
-    class GeneratorExample : IGenerator
+    public class GeneratorExample : IGenerator
     {
 
         public IIndividual genarate()

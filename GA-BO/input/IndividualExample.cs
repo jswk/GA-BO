@@ -27,8 +27,8 @@ namespace GA_BO.input
 
         public Tuple<IIndividual, IIndividual> crossover(IIndividual partner)
         {
-            IIndividual child1 = new IndividualExample(this.x+((IndividualExample)partner).x;
-            IIndividual child2 = new IndividualExample(this.x-((IndividualExample)partner).x; 
+            IIndividual child1 = new IndividualExample(this.x+((IndividualExample)partner).x);
+            IIndividual child2 = new IndividualExample(this.x-((IndividualExample)partner).x); 
             return new Tuple<IIndividual,IIndividual>(child1,child2);
         }
     }

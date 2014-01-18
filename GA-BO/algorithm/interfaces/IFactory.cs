@@ -5,10 +5,10 @@ using System.Text;
 
 namespace GA_BO.algorithm.interfaces
 {
-    interface IFactory
+    public interface IFactory
     {
-        public Population createPopulation();
-        public IIndividual createIndividual(); //maybe it can be deleted, because it's probably used only internally by concrete factories
-        public Population nextPopulation(Population parent);
+        Population createPopulation();
+        IIndividual createIndividual(); //maybe it can be deleted, because it's probably used only internally by concrete factories
+        Population nextPopulation(Population parent);
     }
 }

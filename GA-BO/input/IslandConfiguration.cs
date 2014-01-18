@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GA_BO.algorithm.interfaces;
+using GA_BO.algorithm.enums;
 
 namespace GA_BO.input
 {
-    class IslandConfiguration
+    public class IslandConfiguration
     {
         public EvolutionStrategy evolutionStrategy;
         public double mutationProbability;

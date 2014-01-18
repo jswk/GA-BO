@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="algorithm\EvolutionStrategy.cs" />
+    <Compile Include="algorithm\enums\EvolutionStrategy.cs" />
     <Compile Include="algorithm\interfaces\IFactory.cs" />
     <Compile Include="algorithm\interfaces\IGenerator.cs" />
     <Compile Include="algorithm\interfaces\IIndividual.cs" />

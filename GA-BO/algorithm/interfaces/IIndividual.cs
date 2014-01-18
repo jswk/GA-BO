@@ -7,8 +7,8 @@ namespace GA_BO.algorithm.interfaces
 {
     public interface IIndividual
     {
-        public int value();
-        public void mutate();
-        public Tuple<IIndividual, IIndividual> crossover(IIndividual partner); //http://stackoverflow.com/questions/166089/what-is-c-sharp-analog-of-c-stdpair
+        int value();
+        void mutate();
+        Tuple<IIndividual, IIndividual> crossover(IIndividual partner); //http://stackoverflow.com/questions/166089/what-is-c-sharp-analog-of-c-stdpair
     }
 }
