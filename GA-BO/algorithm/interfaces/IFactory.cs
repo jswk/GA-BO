@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GA_BO.algorithm
+namespace GA_BO.algorithm.interfaces
 {
     interface IFactory
     {

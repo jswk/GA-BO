@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using GA_BO.input;
-
+using GA_BO.algorithm.interfaces;
 namespace GA_BO.algorithm
 {
     public class Island
