@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading;
 using GA_BO.input;
 using GA_BO.algorithm.interfaces;
+using System.Collections.Concurrent;
+
 namespace GA_BO.algorithm
 {
     public class Island
@@ -15,13 +17,14 @@ namespace GA_BO.algorithm
         private Thread islandThread;
         private bool keepGoing=false;
         private IslandConfiguration configuration;
-        private Queue<Island> arrivingIndividuals; //implementation needs to be thread safe
+        private ConcurrentQueue<IIndividual> arrivingIndividuals; //implementation needs to be thread safe
 
         public Island(IFactory factory, IslandConfiguration configuration)
         {
             this.islandThread = new Thread(new ThreadStart(run)); //http://stackoverflow.com/questions/1923512/threading-does-c-sharp-have-an-equivalent-of-the-java-runnable-interface
             this.factory = factory;
             this.configuration = configuration;
+            this.arrivingIndividuals = new ConcurrentQueue<IIndividual>();
         }
 
         public void beginEvolution()
@@ -37,28 +40,71 @@ namespace GA_BO.algorithm
 
         public IIndividual getBest()
         {
-            //zaloz locka !! 
             IIndividual bestIndividual = null;
-            foreach(IIndividual ind in currentPopulation.individuals)
+            lock (currentPopulation)
             {
-                if (ind.value() > bestIndividual.value())
-                {
-                    bestIndividual = ind;
+                foreach (IIndividual ind in currentPopulation.individuals)
+                {   
+                    if (bestIndividual == null)
+                    {
+                        bestIndividual = ind;
+                    }
+                    if (ind.value() > bestIndividual.value())
+                    {
+                        bestIndividual = ind;
+                    }
                 }
             }
             //get best from current population
             return bestIndividual;
         }
 
+
         public void welcomeNewIndividuals(List<IIndividual> arrivals)
         {
             //add arrivals to arrivingIndividuals queue
+            foreach (IIndividual ind in arrivals)
+            {
+                arrivingIndividuals.Enqueue(ind);
+            }
         }
 
-        private void run()
+
+        private void swapPopulation(IIndividual individual) // change the worst inndividual in population to another individual
         {
+            IIndividual worstIndividual = null;
+            lock (currentPopulation)
+            {
+                foreach (IIndividual ind in currentPopulation.individuals)
+                {
+                    if (worstIndividual == null)
+                    {
+                        worstIndividual = ind;
+                    }
+                    if (ind.value() < worstIndividual.value())
+                    {
+                        worstIndividual = ind;
+                    }
+                }
+                var i = currentPopulation.individuals.IndexOf(worstIndividual);
+                currentPopulation.individuals[i] = individual;
+            }
+         }
+
+        private void run()
+        {   
+            currentPopulation = factory.createPopulation();
             while (keepGoing)
             {
+               IIndividual outResult = null;
+               while(arrivingIndividuals.TryDequeue(out outResult))
+               {
+                   swapPopulation(outResult);
+               }
+
+               currentPopulation = factory.nextPopulation(currentPopulation);
+                // it produces start population first, then tries to rechange population using indiviudals from queue.
+               // then produce next generation of population
                 // produce new populations using factory, exchange best individuals with supervisor, add arriving individuals to population...
             }
         }
