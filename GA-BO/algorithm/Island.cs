@@ -70,7 +70,7 @@ namespace GA_BO.algorithm
         }
 
 
-        private void swapPopulation(IIndividual individual) // change the worst inndividual in population to another individual
+        private void swapPopulation(IIndividual individual) // change the worst individual in population to another individual
         {
             IIndividual worstIndividual = null;
             lock (currentPopulation)
@@ -87,7 +87,8 @@ namespace GA_BO.algorithm
                     }
                 }
                 var i = currentPopulation.individuals.IndexOf(worstIndividual);
-                currentPopulation.individuals[i] = individual;
+                currentPopulation.individuals[i] = individual; //changing the worst for new. 
+                //but using this way we could add a lot of weak Individuals and change only one in population if addaing individuals are weak than existing on the island
             }
          }
 
@@ -100,7 +101,15 @@ namespace GA_BO.algorithm
                while(arrivingIndividuals.TryDequeue(out outResult))
                {
                    swapPopulation(outResult);
+               } // change individuals for new 
+
+               List<IIndividual> bestsToExchange = new List<IIndividual>();
+               for (int i = 0; i < configuration.bestIndividualsToExchangeNo; i++)
+               {
+                   bestsToExchange.Add(getBest());
                }
+               supervisor.exchangeIndividuals(this,bestsToExchange);
+                // sending a best part of population to supervisior
 
                currentPopulation = factory.nextPopulation(currentPopulation);
                 // it produces start population first, then tries to rechange population using indiviudals from queue.

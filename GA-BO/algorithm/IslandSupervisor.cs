@@ -23,7 +23,7 @@ namespace GA_BO.algorithm
             return null;
         }
 
-        void exchangeIndividuals(Island from, List<IIndividual> individuals)
+        public void exchangeIndividuals(Island from, List<IIndividual> individuals)
         {
             //send to connected islands
         }

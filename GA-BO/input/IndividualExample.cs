@@ -31,5 +31,10 @@ namespace GA_BO.input
             IIndividual child2 = new IndividualExample(this.x-((IndividualExample)partner).x); 
             return new Tuple<IIndividual,IIndividual>(child1,child2);
         }
+
+        public IIndividual duplicate()
+        {
+            return (IndividualExample) this.MemberwiseClone();
+        }
     }
 }

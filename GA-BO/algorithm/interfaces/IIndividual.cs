@@ -10,5 +10,7 @@ namespace GA_BO.algorithm.interfaces
         int value();
         void mutate();
         Tuple<IIndividual, IIndividual> crossover(IIndividual partner); //http://stackoverflow.com/questions/166089/what-is-c-sharp-analog-of-c-stdpair
+
+        IIndividual duplicate();
     }
 }
