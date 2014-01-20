@@ -19,11 +19,12 @@ namespace GA_BO.algorithm
         private IslandConfiguration configuration;
         private ConcurrentQueue<IIndividual> arrivingIndividuals; //implementation needs to be thread safe
 
-        public Island(IFactory factory, IslandConfiguration configuration)
+        public Island(IFactory factory, IslandConfiguration configuration,IslandSupervisor supervisor)
         {
             this.islandThread = new Thread(new ThreadStart(run)); //http://stackoverflow.com/questions/1923512/threading-does-c-sharp-have-an-equivalent-of-the-java-runnable-interface
             this.factory = factory;
             this.configuration = configuration;
+            this.supervisor = supervisor;
             this.arrivingIndividuals = new ConcurrentQueue<IIndividual>();
         }
 
@@ -56,7 +57,7 @@ namespace GA_BO.algorithm
                 }
             }
             //get best from current population
-            return bestIndividual;
+            return bestIndividual.duplicate();
         }
 
 
@@ -106,7 +107,7 @@ namespace GA_BO.algorithm
                List<IIndividual> bestsToExchange = new List<IIndividual>();
                for (int i = 0; i < configuration.bestIndividualsToExchangeNo; i++)
                {
-                   bestsToExchange.Add(getBest());
+                   bestsToExchange.Add(getBest());  // TU BUG - poprawic 
                }
                supervisor.exchangeIndividuals(this,bestsToExchange);
                 // sending a best part of population to supervisior
