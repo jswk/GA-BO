@@ -93,6 +93,17 @@ namespace GA_BO.algorithm
             }
          }
 
+        private List<IIndividual> getBestsToExchange()
+        {
+            List<IIndividual> tmp = currentPopulation.individuals.OrderByDescending(o => o.value()).ToList();
+            List<IIndividual> result = new List<IIndividual>();
+            for (int i = 0; i < configuration.bestIndividualsToExchangeNo; i++)
+            {
+                result.Add(tmp[i]);
+            }
+            return result;
+            }
+
         private void run()
         {   
             currentPopulation = factory.createPopulation();
@@ -104,11 +115,7 @@ namespace GA_BO.algorithm
                    swapPopulation(outResult);
                } // change individuals for new 
 
-               List<IIndividual> bestsToExchange = new List<IIndividual>();
-               for (int i = 0; i < configuration.bestIndividualsToExchangeNo; i++)
-               {
-                   bestsToExchange.Add(getBest());  // TU BUG - poprawic 
-               }
+               List<IIndividual> bestsToExchange = getBestsToExchange();
                supervisor.exchangeIndividuals(this,bestsToExchange);
                 // sending a best part of population to supervisior
 
