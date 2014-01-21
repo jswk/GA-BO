@@ -9,8 +9,8 @@ namespace GA_BO.input
     public class GlobalConfiguration
     {
         public IGenerator generator;
-        public int numberOfIslands;
         public List<int>[] connections;
         public List<IslandConfiguration> configurations;
+        public int evolutionTimeInSeconds;
     }
 }

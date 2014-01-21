@@ -7,5 +7,6 @@ namespace GA_BO.algorithm.enums
 {
     public enum EvolutionStrategy
     {
+        Roulette
     }
 }
