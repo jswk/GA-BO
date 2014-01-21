@@ -154,7 +154,7 @@ namespace GA_BO.qap
 
         public algorithm.interfaces.IIndividual duplicate()
         {
-            throw new Exception("not implemented yes");  // please implement how to clone this object
+			return new QAPIndividual(problem, permutation);
         }
 	}
 }
