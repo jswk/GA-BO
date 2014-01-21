@@ -26,7 +26,7 @@ namespace GA_BO.qap
 			return permutation.OrderBy(x => random.Next()).ToArray<int>();
 		}
 
-		public algorithm.interfaces.IIndividual genarate()
+		public algorithm.interfaces.IIndividual generate()
 		{
 			return new QAPIndividual(problem, randomPermutation(problem.ProblemSize));
 		}

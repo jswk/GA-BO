@@ -7,6 +7,6 @@ namespace GA_BO.algorithm.interfaces
 {
     public interface IGenerator
     {
-        IIndividual genarate();
+        IIndividual generate();
     }
 }

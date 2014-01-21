@@ -9,7 +9,7 @@ namespace GA_BO.input
     public class GeneratorExample : IGenerator
     {
 
-        public IIndividual genarate()
+        public IIndividual generate()
         {
             Random rnd = new Random();
             return new IndividualExample(rnd.Next(1, 100));
