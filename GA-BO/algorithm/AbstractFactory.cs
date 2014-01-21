@@ -48,6 +48,7 @@ namespace GA_BO.algorithm
                     individual.mutate();
                 }
             }
+            return individuals;
         }
 
         protected abstract List<IIndividual> crossover(List<IIndividual> parents);
