@@ -9,8 +9,10 @@ namespace GA_BO.algorithm
 {
     abstract class AbstractFactory : IFactory
     {
-        private GlobalConfiguration _config;
-        private IslandConfiguration _iconfig;
+        protected Random _rand = new Random();
+
+        protected GlobalConfiguration _config;
+        protected IslandConfiguration _iconfig;
 
         public AbstractFactory(GlobalConfiguration config, IslandConfiguration iconfig)
         {
@@ -32,15 +34,21 @@ namespace GA_BO.algorithm
         {
             var parents = selection(parent.individuals);
             var children = crossover(parents);
-            var newIndividuals = merge(parents, children);
-            newIndividuals = mutate(newIndividuals);
+            children = mutate(children);
 
-            return new Population() {individuals = newIndividuals};
+            return new Population() { individuals = children };
         }
 
-        protected abstract List<IIndividual> mutate(List<IIndividual> individuals);
-
-        protected abstract List<IIndividual> merge(List<IIndividual> parents, List<IIndividual> children);
+        protected virtual List<IIndividual> mutate(List<IIndividual> individuals)
+        {
+            foreach (var individual in individuals)
+            {
+                if (_rand.NextDouble() < _iconfig.mutationProbability)
+                {
+                    individual.mutate();
+                }
+            }
+        }
 
         protected abstract List<IIndividual> crossover(List<IIndividual> parents);
 

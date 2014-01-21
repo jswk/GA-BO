@@ -52,6 +52,8 @@
     <Compile Include="algorithm\IslandConnections.cs" />
     <Compile Include="algorithm\IslandSupervisor.cs" />
     <Compile Include="algorithm\Population.cs" />
+    <Compile Include="algorithm\AbstractFactory.cs" />
+    <Compile Include="algorithm\RouletteFactory.cs" />
     <Compile Include="input\GeneratorExample.cs" />
     <Compile Include="input\GlobalConfiguration.cs" />
     <Compile Include="input\IndividualExample.cs" />
