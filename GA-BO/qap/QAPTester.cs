@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using GA_BO.algorithm;
 using GA_BO.input;
+using GA_BO.algorithm.enums;
 
 namespace GA_BO.qap
 {
@@ -64,11 +65,25 @@ namespace GA_BO.qap
 		public void test(string testName)
 		{
 			QAPProblem problem = problemFromFile(testName);
+
+            //configuration
 			GlobalConfiguration globalConfig = new GlobalConfiguration();
-			// TODO wybrac odpowiednia konfiguracje
-			//IslandSupervisor supervisor = new IslandSupervisor(globalConfig);
-			//int result = supervisor.getResult().value();
-			int result = 5;
+            globalConfig.configurations = new List<IslandConfiguration>();
+            globalConfig.configurations.Add(new IslandConfiguration(algorithm.enums.EvolutionStrategy.Roulette, 0.01, 0.1, 20, 10, 1));
+            globalConfig.configurations.Add(new IslandConfiguration(algorithm.enums.EvolutionStrategy.Roulette, 0.02, 0.05, 30, 10, 1));
+            globalConfig.configurations.Add(new IslandConfiguration(algorithm.enums.EvolutionStrategy.Roulette, 0.05, 0.02, 20, 10, 1));
+            globalConfig.configurations.Add(new IslandConfiguration(algorithm.enums.EvolutionStrategy.Roulette, 0.1, 0.01, 30, 10, 1));
+            globalConfig.connections = new List<int>[globalConfig.configurations.Count];
+            for(int i=0;i<globalConfig.configurations.Count;i++)
+                globalConfig.connections[i] = new List<int>();
+            globalConfig.connections[0].Add(1);
+            globalConfig.connections[2].Add(3);
+            globalConfig.evolutionTimeInSeconds = 1;
+            globalConfig.generator = new QAPGenerator(problem);
+
+			IslandSupervisor supervisor = new IslandSupervisor(globalConfig);
+			int result = supervisor.getResult().value();
+			//int result = 5;
 			saveResult(result, testName);
 		}
 

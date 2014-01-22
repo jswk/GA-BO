@@ -25,11 +25,6 @@ namespace GA_BO.algorithm
 
             int index = Array.IndexOf(_islands, island);
 
-            if (!_connections[index].Any())
-            {
-                return null;
-            }
-
             List<Island> toReturn = new List<Island>();
             foreach (int i in _connections[index])
             {

@@ -26,6 +26,7 @@ namespace GA_BO.algorithm
             this.configuration = configuration;
             this.supervisor = supervisor;
             this.arrivingIndividuals = new ConcurrentQueue<IIndividual>();
+            Console.WriteLine("Island created");
         }
 
         public void beginEvolution()
@@ -50,7 +51,7 @@ namespace GA_BO.algorithm
                     {
                         bestIndividual = ind;
                     }
-                    if (ind.value() > bestIndividual.value())
+                    if (ind.value() < bestIndividual.value())
                     {
                         bestIndividual = ind;
                     }
@@ -82,7 +83,7 @@ namespace GA_BO.algorithm
                     {
                         worstIndividual = ind;
                     }
-                    if (ind.value() < worstIndividual.value())
+                    if (ind.value() > worstIndividual.value())
                     {
                         worstIndividual = ind;
                     }
@@ -95,7 +96,11 @@ namespace GA_BO.algorithm
 
         private List<IIndividual> getBestsToExchange()
         {
-            List<IIndividual> tmp = currentPopulation.individuals.OrderByDescending(o => o.value()).ToList();
+            List<IIndividual> tmp;
+            lock (currentPopulation)
+            {
+                tmp = currentPopulation.individuals.OrderBy(o => o.value()).ToList();
+            }
             List<IIndividual> result = new List<IIndividual>();
             for (int i = 0; i < configuration.bestIndividualsToExchangeNo; i++)
             {
@@ -118,8 +123,10 @@ namespace GA_BO.algorithm
                List<IIndividual> bestsToExchange = getBestsToExchange();
                supervisor.exchangeIndividuals(this,bestsToExchange);
                 // sending a best part of population to supervisior
-
-               currentPopulation = factory.nextPopulation(currentPopulation);
+               lock (currentPopulation)
+               {
+                   currentPopulation = factory.nextPopulation(currentPopulation);
+               }
                 // it produces start population first, then tries to rechange population using indiviudals from queue.
                // then produce next generation of population
                 // produce new populations using factory, exchange best individuals with supervisor, add arriving individuals to population...
