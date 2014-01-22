@@ -70,9 +70,9 @@ namespace GA_BO.qap
 			GlobalConfiguration globalConfig = new GlobalConfiguration();
             globalConfig.configurations = new List<IslandConfiguration>();
             globalConfig.configurations.Add(new IslandConfiguration(algorithm.enums.EvolutionStrategy.Roulette, 0.01, 0.1, 20, 10, 1));
-            globalConfig.configurations.Add(new IslandConfiguration(algorithm.enums.EvolutionStrategy.Roulette, 0.02, 0.05, 30, 10, 1));
-            globalConfig.configurations.Add(new IslandConfiguration(algorithm.enums.EvolutionStrategy.Roulette, 0.05, 0.02, 20, 10, 1));
-            globalConfig.configurations.Add(new IslandConfiguration(algorithm.enums.EvolutionStrategy.Roulette, 0.1, 0.01, 30, 10, 1));
+            globalConfig.configurations.Add(new IslandConfiguration(algorithm.enums.EvolutionStrategy.Stochastic, 0.02, 0.05, 30, 10, 1));
+            globalConfig.configurations.Add(new IslandConfiguration(algorithm.enums.EvolutionStrategy.Tournament, 0.05, 0.02, 20, 10, 1));
+            globalConfig.configurations.Add(new IslandConfiguration(algorithm.enums.EvolutionStrategy.Tournament, 0.1, 0.01, 30, 10, 1));
             globalConfig.connections = new List<int>[globalConfig.configurations.Count];
             for(int i=0;i<globalConfig.configurations.Count;i++)
                 globalConfig.connections[i] = new List<int>();

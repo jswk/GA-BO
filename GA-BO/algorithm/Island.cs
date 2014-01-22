@@ -18,6 +18,7 @@ namespace GA_BO.algorithm
         private bool keepGoing=false;
         private IslandConfiguration configuration;
         private ConcurrentQueue<IIndividual> arrivingIndividuals; //implementation needs to be thread safe
+        private IIndividual bestIndividual;
 
         public Island(IFactory factory, IslandConfiguration configuration,IslandSupervisor supervisor)
         {
@@ -42,23 +43,7 @@ namespace GA_BO.algorithm
 
         public IIndividual getBest()
         {
-            IIndividual bestIndividual = null;
-            lock (currentPopulation)
-            {
-                foreach (IIndividual ind in currentPopulation.individuals)
-                {   
-                    if (bestIndividual == null)
-                    {
-                        bestIndividual = ind;
-                    }
-                    if (ind.value() < bestIndividual.value())
-                    {
-                        bestIndividual = ind;
-                    }
-                }
-            }
-            //get best from current population
-            return bestIndividual.duplicate();
+            return bestIndividual;
         }
 
 
@@ -104,14 +89,26 @@ namespace GA_BO.algorithm
             List<IIndividual> result = new List<IIndividual>();
             for (int i = 0; i < configuration.bestIndividualsToExchangeNo; i++)
             {
-                result.Add(tmp[i]);
+                result.Add(tmp[i].duplicate());
             }
             return result;
             }
 
+        private void actualizeBest()
+        {
+            lock (currentPopulation)
+            {
+                    foreach (IIndividual ind in currentPopulation.individuals)
+                        if (ind.value() < bestIndividual.value())
+                            bestIndividual = ind.duplicate();
+                //get best from current population
+            }
+        }
+
         private void run()
         {   
             currentPopulation = factory.createPopulation();
+            bestIndividual = currentPopulation.individuals[0].duplicate();
             while (keepGoing)
             {
                IIndividual outResult = null;
@@ -127,6 +124,7 @@ namespace GA_BO.algorithm
                {
                    currentPopulation = factory.nextPopulation(currentPopulation);
                }
+               actualizeBest();
                 // it produces start population first, then tries to rechange population using indiviudals from queue.
                // then produce next generation of population
                 // produce new populations using factory, exchange best individuals with supervisor, add arriving individuals to population...
