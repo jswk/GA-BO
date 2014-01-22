@@ -13,6 +13,7 @@ namespace GA_BO.input
         public double mutationProbability;
         public double crossoverProbability;
         public int populationSize;
+        public int selectionSize;
         public int bestIndividualsToExchangeNo;
     }
 }

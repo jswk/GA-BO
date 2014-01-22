@@ -50,8 +50,32 @@ namespace GA_BO.algorithm
             }
             return individuals;
         }
+        
 
-        protected abstract List<IIndividual> crossover(List<IIndividual> parents);
+        protected virtual List<IIndividual> crossover(List<IIndividual> parents)
+        {
+            int needed = _iconfig.populationSize - parents.Count;
+            var children = new List<IIndividual>();
+            while (needed > 0)
+            {
+                var ind1 = parents.ElementAt(_rand.Next(parents.Count));
+                var ind2 = ind1;
+                while (ind2 == ind1)
+                {
+                    ind2 = parents.ElementAt(_rand.Next(parents.Count));
+                }
+
+                var result = ind1.crossover(ind2);
+
+                children.Add(result.Item1);
+                needed--;
+                if (needed == 1) break;
+                children.Add(result.Item2);
+                needed--;
+            }
+            children.AddRange(parents);
+            return children;
+        }
 
         protected abstract List<IIndividual> selection(List<IIndividual> parent);
     }

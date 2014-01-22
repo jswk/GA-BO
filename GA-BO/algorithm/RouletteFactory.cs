@@ -15,37 +15,27 @@ namespace GA_BO.algorithm
 
         protected override List<IIndividual> selection(List<IIndividual> individuals)
         {
-            var sum = individuals.Aggregate(0, (acc, next) => next.value() + acc);
+            var size = _iconfig.selectionSize;
+            var totalFitness = individuals.Aggregate(0, (acc, next) => next.value() + acc);
+            var outInd = new List<IIndividual>();
             // selecting random pool of individuals with probability based on their fitness
-            var selected = from el in individuals
-                           where el.value() < _rand.Next(sum)
-                           select el;
-            return new List<IIndividual>(selected);
-        }
-
-        protected override List<IIndividual> crossover(List<IIndividual> parents)
-        {
-            int needed = _iconfig.populationSize - parents.Count;
-            var children = new List<IIndividual>();
-            while (needed > 0)
+            for (var i = 0; i < size; i++)
             {
-                var ind1 = parents.ElementAt(_rand.Next(parents.Count));
-                var ind2 = ind1;
-                while (ind2 == ind1)
+                var rand = _rand.NextDouble()*totalFitness;
+                var sum = 0;
+                foreach (var individual in individuals)
                 {
-                    ind2 = parents.ElementAt(_rand.Next(parents.Count));
+                    // we're moving a window by individual size
+                    // to a point, where the random number is in the range
+                    if (sum < rand && rand < sum + individual.value())
+                    {
+                        outInd.Add(individual.duplicate());
+                        break;
+                    }
+                    sum += individual.value();
                 }
-
-                var result = ind1.crossover(ind2);
-
-                children.Add(result.Item1);
-                needed--;
-                if (needed == 1) break;
-                children.Add(result.Item2);
-                needed--;
             }
-            children.AddRange(parents);
-            return children;
+            return outInd;
         }
     }
 }
