@@ -77,6 +77,6 @@ namespace GA_BO.algorithm
             return children;
         }
 
-        protected abstract List<IIndividual> selection(List<IIndividual> parent);
+        protected abstract List<IIndividual> selection(List<IIndividual> individuals);
     }
 }

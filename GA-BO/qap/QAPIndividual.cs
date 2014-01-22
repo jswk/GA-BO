@@ -156,5 +156,20 @@ namespace GA_BO.qap
         {
 			return new QAPIndividual(problem, permutation);
         }
+
+	    public int CompareTo(object obj)
+        {
+            if (obj == null) return 1;
+
+            var ind = obj as QAPIndividual;
+            if (ind != null)
+            {
+                return value().CompareTo(ind.value());
+            }
+            else
+            {
+                throw new ArgumentException("Object is not QAPIndividual");
+            }
+	    }
 	}
 }

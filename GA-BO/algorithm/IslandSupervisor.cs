@@ -30,7 +30,10 @@ namespace GA_BO.algorithm
                         factory=new RouletteFactory(configuration,islandConfiguration);
                         break;
                     case EvolutionStrategy.Stochastic:
-                        factory=new StochasticFactory(configuration, islandConfiguration);
+                        factory = new StochasticFactory(configuration, islandConfiguration);
+                        break;
+                    case EvolutionStrategy.Tournament:
+                        factory = new TournamentFactory(configuration, islandConfiguration);
                         break;
                     default:
                         throw new MissingMemberException("Undefined factory for selected strategy!");
