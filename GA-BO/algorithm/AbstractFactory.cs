@@ -45,17 +45,6 @@ namespace GA_BO.algorithm
                 if (parentsPopulation.individuals.Count > i && childrenPopulation.individuals.Count>i)
                 childrenPopulation.individuals[i] = parentsPopulation.individuals[i];
 
-            int i0 = childrenPopulation.individuals[0].value();
-            int i2 = childrenPopulation.individuals[2].value();
-            int i3 = childrenPopulation.individuals[3].value();
-            int i4 = childrenPopulation.individuals[4].value();
-            int i5 = childrenPopulation.individuals[5].value();
-
-            int i11 = childrenPopulation.individuals[11].value();
-            int i12 = childrenPopulation.individuals[12].value();
-            int i13 = childrenPopulation.individuals[13].value();
-            int i14 = childrenPopulation.individuals[14].value();
-
             return childrenPopulation;
         }
 
