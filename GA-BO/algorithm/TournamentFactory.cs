@@ -15,14 +15,14 @@ namespace GA_BO.algorithm
 
         protected override List<IIndividual> selection(List<IIndividual> individuals)
         {
-            var pressure = 0.7; // would be nice to be able to put in config
+            var pressure = 0.95; // would be nice to be able to put in config
             var selected = new List<IIndividual>();
             var size = _iconfig.selectionSize;
             for (var i = 0; i < size; i++)
             {
                 var one = individuals.ElementAt(_rand.Next(individuals.Count));
                 var two = individuals.ElementAt(_rand.Next(individuals.Count));
-                var better = one.CompareTo(two) > 0 ? one : two;
+                var better = one.CompareTo(two) < 0 ? one : two;
                 var worse  = one.CompareTo(two) > 0 ? two : one;
                 selected.Add((_rand.NextDouble() < pressure) ? better.duplicate() : worse.duplicate());
             }

@@ -30,13 +30,33 @@ namespace GA_BO.algorithm
             return new Population() {individuals = individuals};
         }
 
+
+
         public Population nextPopulation(Population parent)
         {
             var parents = selection(parent.individuals);
             var children = crossover(parents);
             children = mutate(children);
 
-            return new Population() { individuals = children };
+            var parentsPopulation = new Population() { individuals = parents.OrderBy(o => o.value()).ToList()};
+            var childrenPopulation = new Population() { individuals = children.OrderByDescending(o => o.value()).ToList()};
+            for (int i = 0; i < _iconfig.populationSize / 2; i++)
+                //if(!children.Contains(parent[i])
+                if (parentsPopulation.individuals.Count > i && childrenPopulation.individuals.Count>i)
+                childrenPopulation.individuals[i] = parentsPopulation.individuals[i];
+
+            int i0 = childrenPopulation.individuals[0].value();
+            int i2 = childrenPopulation.individuals[2].value();
+            int i3 = childrenPopulation.individuals[3].value();
+            int i4 = childrenPopulation.individuals[4].value();
+            int i5 = childrenPopulation.individuals[5].value();
+
+            int i11 = childrenPopulation.individuals[11].value();
+            int i12 = childrenPopulation.individuals[12].value();
+            int i13 = childrenPopulation.individuals[13].value();
+            int i14 = childrenPopulation.individuals[14].value();
+
+            return childrenPopulation;
         }
 
         protected virtual List<IIndividual> mutate(List<IIndividual> individuals)

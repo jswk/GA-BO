@@ -100,7 +100,10 @@ namespace GA_BO.algorithm
             {
                     foreach (IIndividual ind in currentPopulation.individuals)
                         if (ind.value() < bestIndividual.value())
+                        {
                             bestIndividual = ind.duplicate();
+                            Console.WriteLine("best " + bestIndividual.value());
+                        }
                 //get best from current population
             }
         }

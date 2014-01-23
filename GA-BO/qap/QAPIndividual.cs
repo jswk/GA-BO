@@ -9,7 +9,7 @@ namespace GA_BO.qap
 	{
 		private QAPProblem problem;
 
-		private int[] permutation;
+		public int[] permutation;
 
 		private Random random = new Random();
 
@@ -19,7 +19,15 @@ namespace GA_BO.qap
 			this.permutation = value;
 		}
 
-		public int value()
+        public override int GetHashCode()
+        {
+            int hash = 0;
+            for (int i = 0; i < problem.ProblemSize; i++)
+                hash += i * permutation[i];
+            return hash;
+        }
+
+        public int value()
 		{
 			int cost = 0;
 			for (int i = 0; i < problem.ProblemSize; i++)

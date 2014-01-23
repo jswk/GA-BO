@@ -11,7 +11,9 @@ namespace GA_BO
         static void Main(string[] args)
         {
 			QAPTester tester = new QAPTester();
-			tester.allTest();
+			//tester.allTest();
+            tester.test("kra30b.dat");
+            Console.ReadKey();
         }
     }
 }
