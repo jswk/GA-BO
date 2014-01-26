@@ -62,7 +62,7 @@ namespace GA_BO.qap
 			QAPProblem problem = problemFromFile(testName);
 
             //configuration
-			GlobalConfiguration globalConfig = new GlobalConfiguration();
+			GlobalConfiguration globalConfig = new GlobalConfiguration(){maximize = false};
             globalConfig.configurations = new List<IslandConfiguration>();
             globalConfig.configurations.Add(new IslandConfiguration(algorithm.enums.EvolutionStrategy.Tournament, 0.01, 0.1, 20, 10, 1));
             globalConfig.configurations.Add(new IslandConfiguration(algorithm.enums.EvolutionStrategy.Tournament, 0.02, 0.05, 30, 10, 1));

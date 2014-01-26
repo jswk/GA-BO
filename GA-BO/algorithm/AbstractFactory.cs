@@ -38,7 +38,7 @@ namespace GA_BO.algorithm
             var children = crossover(parents);
             children = mutate(children);
 
-            var childrenPopulation = new Population() { individuals = children.OrderByDescending(o => o.value()).ToList() };
+            var childrenPopulation = new Population() { individuals = children.OrderByDescending(o => getIndividualFitness(o)).ToList() };
 
             return childrenPopulation;
         }
@@ -58,7 +58,7 @@ namespace GA_BO.algorithm
 
         protected virtual List<IIndividual> crossover(List<IIndividual> parents)
         {
-            int needed = _iconfig.populationSize - parents.Count;
+            var needed = _iconfig.populationSize - parents.Count;
             var children = new List<IIndividual>();
             while (needed > 0)
             {
@@ -68,7 +68,7 @@ namespace GA_BO.algorithm
                 {
                     ind2 = parents.ElementAt(_rand.Next(parents.Count));
                 }
-
+                
                 var result = ind1.crossover(ind2);
 
                 children.Add(result.Item1);
@@ -82,5 +82,10 @@ namespace GA_BO.algorithm
         }
 
         protected abstract List<IIndividual> selection(List<IIndividual> individuals);
+
+        protected double getIndividualFitness(IIndividual ind)
+        {
+            return (_config.maximize) ? ind.value() : 1.0 / ind.value();
+        }
     }
 }

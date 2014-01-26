@@ -16,8 +16,8 @@ namespace GA_BO.algorithm
         protected override List<IIndividual> selection(List<IIndividual> individuals)
         {
             var size = _iconfig.selectionSize;
-            var totalFitness = individuals.Aggregate(0, (acc, next) => next.value() + acc);
-            var step = totalFitness * 1.0 / size;
+            var totalFitness = individuals.Aggregate(0.0, (acc, next) => getIndividualFitness(next) + acc);
+            var step = totalFitness / size;
             var start = _rand.NextDouble()*step;
             var indOut = new List<IIndividual>();
             var threshold = 0.0;
@@ -30,12 +30,12 @@ namespace GA_BO.algorithm
                  *               then skip by totalFitness / size
                  *  less elitist than Roulette which promotes the best individuals the most
                  */
-                while (start < threshold + ind.value())
+                while (start < threshold + getIndividualFitness(ind))
                 {
                     indOut.Add(ind.duplicate());
                     start += step;
                 }
-                threshold += ind.value();
+                threshold += getIndividualFitness(ind);
             }
             return indOut;
         }

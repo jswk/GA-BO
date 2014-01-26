@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GA_BO.algorithm.interfaces
 {
-    public interface IIndividual : IComparable
+    public interface IIndividual
     {
         int value();
         void mutate();

@@ -65,8 +65,11 @@ namespace GA_BO.qap
         {
             QAPIndividual qapPartner = (QAPIndividual)partner; // ugly :/
 
+            Console.WriteLine("one");
             QAPIndividual firstChild = CXCrossover(this, qapPartner);
+            Console.WriteLine("two");
             QAPIndividual secondChild = CXCrossover(this, qapPartner);
+            Console.WriteLine("return");
 
             return new Tuple<algorithm.interfaces.IIndividual, algorithm.interfaces.IIndividual>(firstChild, secondChild);
         }
@@ -129,20 +132,5 @@ namespace GA_BO.qap
         {
 			return new QAPIndividual(problem, permutation);
         }
-
-	    public int CompareTo(object obj)
-        {
-            if (obj == null) return 1;
-
-            var ind = obj as QAPIndividual;
-            if (ind != null)
-            {
-                return value().CompareTo(ind.value());
-            }
-            else
-            {
-                throw new ArgumentException("Object is not QAPIndividual");
-            }
-	    }
 	}
 }

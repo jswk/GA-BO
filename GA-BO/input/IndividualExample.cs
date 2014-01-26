@@ -36,19 +36,5 @@ namespace GA_BO.input
         {
             return (IndividualExample) this.MemberwiseClone();
         }
-
-        public int CompareTo(object obj)
-        {
-            if (obj == null) return 1;
-
-            var ind = obj as IIndividual;
-            if (ind != null)
-            {
-                return value().CompareTo(ind.value());
-            } else
-            {
-                throw new ArgumentException("Object is not IIndividual");
-            }
-        }
     }
 }

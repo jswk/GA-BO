@@ -22,8 +22,9 @@ namespace GA_BO.algorithm
             {
                 var one = individuals.ElementAt(_rand.Next(individuals.Count));
                 var two = individuals.ElementAt(_rand.Next(individuals.Count));
-                var better = one.CompareTo(two) < 0 ? one : two;
-                var worse  = one.CompareTo(two) > 0 ? two : one;
+                var oneBetter = getIndividualFitness(one) > getIndividualFitness(two);
+                var better = oneBetter ? one : two;
+                var worse  = oneBetter ? two : one;
                 selected.Add((_rand.NextDouble() < pressure) ? better.duplicate() : worse.duplicate());
             }
             return selected;
