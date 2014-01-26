@@ -38,12 +38,7 @@ namespace GA_BO.algorithm
             var children = crossover(parents);
             children = mutate(children);
 
-            var parentsPopulation = new Population() { individuals = parents.OrderBy(o => o.value()).ToList()};
-            var childrenPopulation = new Population() { individuals = children.OrderByDescending(o => o.value()).ToList()};
-            for (int i = 0; i < _iconfig.populationSize / 2; i++)
-                //if(!children.Contains(parent[i])
-                if (parentsPopulation.individuals.Count > i && childrenPopulation.individuals.Count>i)
-                childrenPopulation.individuals[i] = parentsPopulation.individuals[i];
+            var childrenPopulation = new Population() { individuals = children.OrderByDescending(o => o.value()).ToList() };
 
             return childrenPopulation;
         }

@@ -59,106 +59,71 @@ namespace GA_BO.qap
 			int tmp = permutation[firstIndex];
 			permutation[firstIndex] = permutation[secondIndex];
 			permutation[secondIndex] = tmp;
-		}
+        }
 
-		public Tuple<algorithm.interfaces.IIndividual, algorithm.interfaces.IIndividual> crossover(algorithm.interfaces.IIndividual partner)
-		{
-			QAPIndividual qapPartner = (QAPIndividual)partner; // ugly :/
+        public Tuple<algorithm.interfaces.IIndividual, algorithm.interfaces.IIndividual> crossover(algorithm.interfaces.IIndividual partner)
+        {
+            QAPIndividual qapPartner = (QAPIndividual)partner; // ugly :/
 
-			QAPIndividual firstChild = makeChild(this, qapPartner);
-			QAPIndividual secondChild = makeChild(this, qapPartner);
+            QAPIndividual firstChild = CXCrossover(this, qapPartner);
+            QAPIndividual secondChild = CXCrossover(this, qapPartner);
 
-			return new Tuple<algorithm.interfaces.IIndividual, algorithm.interfaces.IIndividual>(firstChild, secondChild);
-		}
+            return new Tuple<algorithm.interfaces.IIndividual, algorithm.interfaces.IIndividual>(firstChild, secondChild);
+        }
 
-		// uniform like crossover 
-		// http://itc.ktu.lt/itc342/Misev342.pdf
-		private QAPIndividual makeChild(QAPIndividual parent1, QAPIndividual parent2)
-		{
-			int problemSize = parent1.problem.ProblemSize;
-			int[] newPermutation = new int[problemSize];
-			bool[] isUsed = new bool[problemSize];
+        private QAPIndividual CXCrossover(QAPIndividual parent1, QAPIndividual parent2)
+        {
+            int problemSize = parent1.problem.ProblemSize;
+            int[] newPermutation = new int[problemSize];
+            bool[] isUsed = new bool[problemSize];
 
-			// First, all items assigned to the same position in both parents are copied to this position in the child. 
-			for (int i = 0; i < problemSize; i++)
-			{
-				newPermutation[i] = -1;// no element
+            // First, all items assigned to the same position in both parents are copied to this position in the child. 
+            for (int i = 0; i < problemSize; i++)
+            {
+                newPermutation[i] = -1;// no element
 
-				if (parent1.permutation[i] == parent2.permutation[i])
-				{
-					newPermutation[i] = parent1.permutation[i];
-					isUsed[newPermutation[i]] = true;
-				}
-			}
+                if (parent1.permutation[i] == parent2.permutation[i])
+                {
+                    newPermutation[i] = parent1.permutation[i];
+                    isUsed[newPermutation[i]] = true;
+                }
+            }
 
-			// Second, the unassigned positions of a permutation are scanned
-			// from left to right: for the unassigned position, an item 
-			// is chosen randomly, uniformly from those in the 
-			// parents if they are not yet included in the child.
-			for (int i = 0; i < problemSize; i++)
-			{
-				if (newPermutation[i] == -1)// no element
-				{
-					// both parents values are unused
-					if (!isUsed[parent1.permutation[i]] && !isUsed[parent2.permutation[i]])
-					{
-						int fromWhich = random.Next(2);
 
-						int value;
-						if (fromWhich == 0)
-						{
-							value = parent1.permutation[i];
-						} 
-						else
-						{
-							value = parent2.permutation[i];
-						}
+            for (int i = 0; i < newPermutation.Length; i++)
+            {
+                if (newPermutation[i] == -1)
+                {
+                    int from = random.Next(2);
+                    QAPIndividual parent;
+                    if (from == 0)
+                    {
+                        parent = parent1;
+                    }
+                    else
+                    {
+                        parent = parent2;
+                    }
 
-						newPermutation[i] = value;
-						isUsed[value] = true;
-					}
-					else if (!isUsed[parent1.permutation[i]])
-					{
-						newPermutation[i] = parent1.permutation[i];
-						isUsed[newPermutation[i]] = true;
-					} 
-					else if (!isUsed[parent2.permutation[i]])
-					{
-						newPermutation[i] = parent2.permutation[i];
-						isUsed[newPermutation[i]] = true;
-					}
-				}
-			}
+                    int startPos = i;
+                    int v = parent.permutation[startPos];
 
-			// Third, remaining items are assigned at random
-			List<int> remaining = new List<int>();
+                    newPermutation[startPos] = v;
 
-			for (int i = 0; i < problemSize; i++)
-			{
-				if (!isUsed[i])
-				{
-					remaining.Add(i);
-				}
-			}
+                    int pos = v;
+                    while (pos != i)
+                    {
+                        v = parent.permutation[pos];
+                        newPermutation[pos] = v;
+                        pos = v;
+                    }
 
-			int[] remainingArray = remaining.ToArray<int>();
+                    newPermutation[pos] = parent.permutation[pos];
+                }
+            }
 
-			// random shuffle
-			remainingArray = remainingArray.OrderBy(x => random.Next()).ToArray<int>();
-
-			int j = 0;
-			for (int i = 0; i < problemSize; i++)
-			{
-				if (newPermutation[i] == -1)
-				{
-					newPermutation[i] = remainingArray[j];
-					isUsed[newPermutation[i]] = true;
-					j++;
-				}
-			}
-
-			return new QAPIndividual(parent1.problem, newPermutation);
-		}
+            return new QAPIndividual(problem, newPermutation);
+        }
 
         public algorithm.interfaces.IIndividual duplicate()
         {
