@@ -85,6 +85,7 @@ namespace GA_BO.algorithm
 
         protected double getIndividualFitness(IIndividual ind)
         {
+            // assumes fitness > 0
             return (_config.maximize) ? ind.value() : 1.0 / ind.value();
         }
     }

@@ -16,7 +16,7 @@ namespace GA_BO.qap
 		public QAPIndividual(QAPProblem problem, int[] value)
 		{
 			this.problem = problem;
-			this.permutation = value;
+		    permutation = value;
 		}
 
         public override int GetHashCode()
@@ -65,11 +65,8 @@ namespace GA_BO.qap
         {
             QAPIndividual qapPartner = (QAPIndividual)partner; // ugly :/
 
-            Console.WriteLine("one");
             QAPIndividual firstChild = CXCrossover(this, qapPartner);
-            Console.WriteLine("two");
             QAPIndividual secondChild = CXCrossover(this, qapPartner);
-            Console.WriteLine("return");
 
             return new Tuple<algorithm.interfaces.IIndividual, algorithm.interfaces.IIndividual>(firstChild, secondChild);
         }
@@ -91,46 +88,84 @@ namespace GA_BO.qap
                     isUsed[newPermutation[i]] = true;
                 }
             }
-
-
+            
             for (int i = 0; i < newPermutation.Length; i++)
             {
                 if (newPermutation[i] == -1)
                 {
                     int from = random.Next(2);
                     QAPIndividual parent;
+                    QAPIndividual parentOther;
                     if (from == 0)
                     {
                         parent = parent1;
+                        parentOther = parent2;
                     }
                     else
                     {
                         parent = parent2;
+                        parentOther = parent1;
                     }
 
-                    int startPos = i;
-                    int v = parent.permutation[startPos];
-
-                    newPermutation[startPos] = v;
-
-                    int pos = v;
-                    while (pos != i)
+                    int pos = i;
+                    do
                     {
-                        v = parent.permutation[pos];
-                        newPermutation[pos] = v;
-                        pos = v;
-                    }
-
-                    newPermutation[pos] = parent.permutation[pos];
+                        var val = parentOther.permutation[pos];
+                        newPermutation[pos] = parent.permutation[pos];
+                        for (var j = 0; j < problemSize; j++)
+                        {
+                            if (parent.permutation[j] != val) continue;
+                            pos = j;
+                            break;
+                        }
+                    } while (pos != i);
                 }
             }
 
             return new QAPIndividual(problem, newPermutation);
         }
 
-        public algorithm.interfaces.IIndividual duplicate()
+	    private static Boolean HasDuplicates(IList<int> newPermutation, int problemSize)
+	    {
+	        for (var i = 0; i < problemSize - 1; i++)
+	        {
+	            var val = newPermutation[i];
+	            for (var j = i + 1; j < problemSize; j++)
+	            {
+	                if (val == newPermutation[j])
+	                {
+	                    return true;
+	                }
+	            }
+	        }
+	        return false;
+	    }
+
+	    private static string GetPermutationString(int problemSize, IList<int> permutation)
         {
-			return new QAPIndividual(problem, permutation);
+            var outstr = "";
+            var sep = "";
+            for (var i = 0; i < problemSize; i++)
+            {
+                if (permutation[i] != -1)
+                {
+                    outstr += sep + permutation[i];
+                } else
+                {
+                    outstr += sep + "-";
+                }
+                sep = ",";
+            }
+	        return outstr + "\n";
         }
+
+	    public algorithm.interfaces.IIndividual duplicate()
+        {
+            var perm = new int[problem.ProblemSize];
+            Array.Copy(permutation, perm, problem.ProblemSize);
+			return new QAPIndividual(problem, perm);
+        }
+
+	    private static IList<QAPIndividual> lok = new List<QAPIndividual>();
 	}
 }
