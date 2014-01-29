@@ -51,11 +51,13 @@
     <Compile Include="algorithm\Island.cs" />
     <Compile Include="algorithm\IslandConnections.cs" />
     <Compile Include="algorithm\IslandSupervisor.cs" />
+    <Compile Include="algorithm\LinearRankedFactory.cs" />
     <Compile Include="algorithm\Population.cs" />
     <Compile Include="algorithm\AbstractFactory.cs" />
     <Compile Include="algorithm\TournamentFactory.cs" />
     <Compile Include="algorithm\RouletteFactory.cs" />
     <Compile Include="algorithm\StochasticFactory.cs" />
+    <Compile Include="algorithm\TruncationFactory.cs" />
     <Compile Include="input\GeneratorExample.cs" />
     <Compile Include="input\GlobalConfiguration.cs" />
     <Compile Include="input\IndividualExample.cs" />

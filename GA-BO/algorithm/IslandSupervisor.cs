@@ -35,6 +35,12 @@ namespace GA_BO.algorithm
                     case EvolutionStrategy.Tournament:
                         factory = new TournamentFactory(configuration, islandConfiguration);
                         break;
+                    case EvolutionStrategy.LinearRanked:
+                        factory = new LinearRankedFactory(configuration, islandConfiguration);
+                        break;
+                    case EvolutionStrategy.Truncation:
+                        factory = new TruncationFactory(configuration, islandConfiguration);
+                        break;
                     default:
                         throw new MissingMemberException("Undefined factory for selected strategy!");
                 }
