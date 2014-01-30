@@ -64,6 +64,8 @@ namespace GA_BO.algorithm
             {
                 foreach (IIndividual ind in currentPopulation.individuals)
                 {
+                    if (ind.GetHashCode() == individual.GetHashCode()) //if we already have such individual, do not let him in
+                        return;
                     if (worstIndividual == null)
                     {
                         worstIndividual = ind;
