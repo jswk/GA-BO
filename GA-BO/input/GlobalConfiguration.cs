@@ -11,6 +11,7 @@ namespace GA_BO.input
         public IGenerator generator;
         public List<int>[] connections;
         public List<IslandConfiguration> configurations;
+        public Boolean maximize;
         public int evolutionTimeInSeconds;
     }
 }

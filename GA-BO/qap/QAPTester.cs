@@ -18,8 +18,10 @@ namespace GA_BO.qap
 		private QAPProblem problemFromFile(string testName)
 		{
 			string fileName = testPath + testName;
-			var lines = System.IO.File.ReadAllLines(fileName);
-			int n = Int32.Parse(lines[0]);
+	        var text = System.IO.File.ReadAllText(fileName);
+            char[] separators = { ' ', '\t', '\n', '\r' };
+            var numbers = text.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+            int n = Int32.Parse(numbers[0]);
 
 			int[][] w = new int[n][];
 			int[][] d = new int[n][];
@@ -29,25 +31,18 @@ namespace GA_BO.qap
 				d[i] = new int[n];
 			}
 
-			char[] separators = { ' ', '\t' };
 
-			for (int i = 2; i < n + 2; i++)
+            for (int i = 0; i < n; i++)
 			{
-				string[] numbers = lines[i].Split(separators, StringSplitOptions.RemoveEmptyEntries);
-				for (int j = 0; j < numbers.Length; j++)
-				{
-					w[i - 2][j] = Convert.ToInt32(numbers[j]);
-				}
+			
+                for (int j = 0; j < n; j++)
+                    {
+                        w[i][j] = Convert.ToInt32(numbers[1 + (i * n) + j]);
+                        d[i][j] = Convert.ToInt32(numbers[1 + (n * n) + (i * n) + j]);
+                    }
 			}
 
-			for (int i = n + 3; i < 2 * n + 3; i++)
-			{
-				string[] numbers = lines[i].Split(separators, StringSplitOptions.RemoveEmptyEntries);
-				for (int j = 0; j < numbers.Length; j++)
-				{
-					d[i - n - 3][j] = Convert.ToInt32(numbers[j]);
-				}
-			}
+
 
 			return new QAPProblem(n, w, d);
 		}
@@ -67,24 +62,27 @@ namespace GA_BO.qap
 			QAPProblem problem = problemFromFile(testName);
 
             //configuration
-			GlobalConfiguration globalConfig = new GlobalConfiguration();
+			GlobalConfiguration globalConfig = new GlobalConfiguration(){maximize = false};
             globalConfig.configurations = new List<IslandConfiguration>();
-            globalConfig.configurations.Add(new IslandConfiguration(algorithm.enums.EvolutionStrategy.Roulette, 0.01, 0.1, 20, 10, 1));
-            globalConfig.configurations.Add(new IslandConfiguration(algorithm.enums.EvolutionStrategy.Stochastic, 0.02, 0.05, 30, 10, 1));
+            globalConfig.configurations.Add(new IslandConfiguration(algorithm.enums.EvolutionStrategy.Tournament, 0.01, 0.1, 20, 10, 1));
+            globalConfig.configurations.Add(new IslandConfiguration(algorithm.enums.EvolutionStrategy.Tournament, 0.02, 0.05, 30, 10, 1));
             globalConfig.configurations.Add(new IslandConfiguration(algorithm.enums.EvolutionStrategy.Tournament, 0.05, 0.02, 20, 10, 1));
             globalConfig.configurations.Add(new IslandConfiguration(algorithm.enums.EvolutionStrategy.Tournament, 0.1, 0.01, 30, 10, 1));
             globalConfig.connections = new List<int>[globalConfig.configurations.Count];
             for(int i=0;i<globalConfig.configurations.Count;i++)
                 globalConfig.connections[i] = new List<int>();
-            globalConfig.connections[0].Add(1);
-            globalConfig.connections[2].Add(3);
-            globalConfig.evolutionTimeInSeconds = 1;
+            //globalConfig.connections[0].Add(3);
+            //globalConfig.connections[1].Add(3);
+            //globalConfig.connections[2].Add(3);
+            globalConfig.evolutionTimeInSeconds = 25;
             globalConfig.generator = new QAPGenerator(problem);
 
 			IslandSupervisor supervisor = new IslandSupervisor(globalConfig);
-			int result = supervisor.getResult().value();
+			QAPIndividual result =(QAPIndividual) supervisor.getResult();
+            foreach(int i in result.permutation)
+                Console.WriteLine(i.ToString() + " ");
 			//int result = 5;
-			saveResult(result, testName);
+			saveResult(result.value(), testName);
 		}
 
 		// results in "qap/results"

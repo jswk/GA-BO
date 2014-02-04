@@ -7,6 +7,6 @@ namespace GA_BO.algorithm.enums
 {
     public enum EvolutionStrategy
     {
-        Roulette, Stochastic, Tournament
+        Roulette, Stochastic, Tournament, LinearRanked, Truncation
     }
 }
