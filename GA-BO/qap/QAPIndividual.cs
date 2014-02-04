@@ -61,14 +61,98 @@ namespace GA_BO.qap
 			permutation[secondIndex] = tmp;
         }
 
+        private int pos(int[] t, int element)
+		{
+			for (int i = 0; i < t.Length; i++)
+			{
+				if (t[i] == element)
+				{
+					return i;
+				}
+			}
+			return -1;
+		}
+
         public Tuple<algorithm.interfaces.IIndividual, algorithm.interfaces.IIndividual> crossover(algorithm.interfaces.IIndividual partner)
         {
             QAPIndividual qapPartner = (QAPIndividual)partner; // ugly :/
 
-            QAPIndividual firstChild = CXCrossover(this, qapPartner);
-            QAPIndividual secondChild = CXCrossover(this, qapPartner);
+            //QAPIndividual firstChild = makeChild(this, qapPartner);
+            //QAPIndividual secondChild = makeChild(this, qapPartner);
 
-            return new Tuple<algorithm.interfaces.IIndividual, algorithm.interfaces.IIndividual>(firstChild, secondChild);
+            //return new Tuple<algorithm.interfaces.IIndividual, algorithm.interfaces.IIndividual>(firstChild, secondChild);
+
+            int n = this.problem.ProblemSize;
+
+            int[] firstPermutation = this.permutation;
+            int[] secondPermutation = qapPartner.permutation;
+
+            int[][] permutations = new int[2][];
+            permutations[0] = firstPermutation;
+            permutations[1] = secondPermutation;
+
+            int[] offspring1 = new int[n];
+            int[] offspring2 = new int[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                offspring1[i] = -1;
+                offspring2[i] = -1;
+            }
+
+            //printArray(offspring1);
+
+            for (int i = 0; i < n; i++)
+            {
+                //Console.WriteLine(i);
+                if (offspring1[i] == -1)
+                {
+                    //Console.WriteLine(i);
+                    int par = random.Next(2);
+
+                    int start1 = permutations[par][i];
+                    int start2 = permutations[1 - par][i];
+
+                    int el1 = start1;
+                    int el2 = start2;
+
+
+                    offspring1[i] = el1;
+                    offspring2[i] = el2;
+
+                    int pos1 = pos(permutations[1 - par], el1);
+                    int pos2 = pos(permutations[par], el2);
+
+
+
+                    //Console.WriteLine("" + pos1 + " " + pos2 + " " + el1 + " " + el2 + " " + par + " " + i);
+                    //printArray(offspring1);
+                    //printArray(offspring2);
+
+                    //Console.WriteLine("new pos1 = " + pos1 + " new pos2 = " + pos2);
+
+                    while (i != pos1)
+                    {
+                        el1 = permutations[par][pos1];
+                        el2 = permutations[1 - par][pos2];
+
+                        offspring1[pos1] = el1;
+                        offspring2[pos2] = el2;
+
+
+                        //Console.WriteLine("" + pos1 + " " + pos2 + " " + el1 + " " + el2);
+                        //printArray(offspring1);
+                        //printArray(offspring2);
+
+                        pos1 = pos(permutations[1 - par], el1);
+                        pos2 = pos(permutations[par], el2);
+
+                        //Console.ReadKey();
+                    }
+                }
+            }
+
+            return new Tuple<algorithm.interfaces.IIndividual, algorithm.interfaces.IIndividual>(new QAPIndividual(problem, offspring1), new QAPIndividual(problem, offspring2));
         }
 
         private QAPIndividual CXCrossover(QAPIndividual parent1, QAPIndividual parent2)
